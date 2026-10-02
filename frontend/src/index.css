@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0284c7; /* Sky 600 */
+  --color-secondary: #0ea5e9; /* Sky 500 */
+  --color-dark: #082f49; /* Sky 900 */
+  --color-light: #f0f9ff; /* Sky 50 */
+}
+
+body {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
