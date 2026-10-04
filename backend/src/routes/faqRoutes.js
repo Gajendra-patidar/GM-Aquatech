@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAll, getOne, create, update, deleteData } = require('../controllers/fAQController');
+const { getAll, getOne, create, update, deleteData } = require('../controllers/faqController');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
