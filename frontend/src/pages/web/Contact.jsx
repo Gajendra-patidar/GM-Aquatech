@@ -1,10 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { SettingsContext } from '../../context/SettingsContext';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import api from '../../services/api';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
   const { settings } = useContext(SettingsContext);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await api.post('/contact-messages', formData);
+      toast.success('Message sent successfully! We will get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      toast.error('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-light min-h-screen py-16 overflow-hidden">
@@ -76,33 +98,32 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="p-8 md:p-12">
               <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input type="text" className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="Your Name" required />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="Your Name" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="your@email.com" required />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="your@email.com" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                  <input type="text" className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="How can we help?" required />
+                  <input type="text" name="subject" value={formData.subject} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="How can we help?" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                  <textarea rows="5" className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="Your message here..." required></textarea>
+                  <textarea name="message" value={formData.message} onChange={handleChange} rows="5" className="w-full p-3 border border-gray-300 rounded focus:border-primary outline-none" placeholder="Your message here..." required></textarea>
                 </div>
-                <button type="submit" className="bg-primary text-white px-8 py-3 rounded font-medium hover:bg-blue-800 transition shadow-sm">
-                  Send Message
+                <button type="submit" disabled={loading} className={`bg-primary text-white px-8 py-3 rounded font-medium hover:bg-blue-800 transition shadow-sm ${loading ? 'opacity-70' : ''}`}>
+                  {loading ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
             
             <div className="bg-gray-200 h-full min-h-[400px]">
-              {/* Fallback to simple iframe if mapUrl not set, usually you embed an actual google maps iframe */}
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224345.83923192776!2d77.06889754720782!3d28.52758200617607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1683901377543!5m2!1sen!2sin" 
+                src={settings?.mapUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224345.83923192776!2d77.06889754720782!3d28.52758200617607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1683901377543!5m2!1sen!2sin"} 
                 width="100%" 
                 height="100%" 
                 style={{border:0}} 

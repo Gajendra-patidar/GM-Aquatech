@@ -28,18 +28,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
-    if (res.data.success) {
-      const data = {
-        token: res.data.token,
-        id: res.data.admin.id,
-        email: res.data.admin.email
-      };
-      localStorage.setItem('admin', JSON.stringify(data));
-      setAdmin(data);
-      return true;
+    try {
+      const res = await api.post('/auth/login', { email, password });
+      if (res.data.success) {
+        const data = {
+          token: res.data.token,
+          id: res.data.admin.id,
+          email: res.data.admin.email
+        };
+        localStorage.setItem('admin', JSON.stringify(data));
+        setAdmin(data);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {

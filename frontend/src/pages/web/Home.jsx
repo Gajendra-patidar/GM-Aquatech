@@ -2,9 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import api from '../../services/api';
+import RoImg from '../../assets/ro_one.png';
+import waterMark from '../../assets/slider3.jpg'
+
+const reviews = [
+  { id: 1, name: "Rahul Sharma", company: "Aqua Solutions", text: "G M Aquatech provides the best wholesale pricing in the market. Highly recommended!", rating: 5 },
+  { id: 2, name: "Vikram Singh", company: "Pure Water Inc.", text: "Excellent quality RO components and very fast pan-India delivery.", rating: 5 },
+  { id: 3, name: "Amit Patel", company: "Patel RO Services", text: "Very reliable supplier for our commercial RO plant setups. Great support.", rating: 4 },
+  { id: 4, name: "Suresh Kumar", company: "Kumar Enterprises", text: "The premium quality products have helped us gain more happy customers.", rating: 5 },
+  { id: 5, name: "Neha Gupta", company: "Gupta Traders", text: "Top-notch customer service and a vast range of products available.", rating: 5 },
+];
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [reviewIndex, setReviewIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setReviewIndex((prev) => (prev + 1) % 15);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -143,15 +161,14 @@ const Home = () => {
               <motion.img 
                 animate={{ y: [0, -20, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                src="https://images.unsplash.com/photo-1544441892-794166f1e3fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src={RoImg}
                 alt="RO Plant" 
                 className="absolute top-0 right-0 w-3/4 h-3/4 object-cover rounded-3xl shadow-2xl border-4 border-white/10 z-20"
               />
               <motion.img 
                 animate={{ y: [0, 20, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                src="https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-                alt="Water Filter" 
+                src={RoImg}
                 className="absolute bottom-0 left-0 w-2/3 h-2/3 object-cover rounded-3xl shadow-2xl border-4 border-white/10 z-30"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-primary/20 rounded-3xl z-10 blur-xl"></div>
@@ -179,6 +196,59 @@ const Home = () => {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-dark mb-4">Featured Products</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Discover our top-rated RO systems and fast-moving spare parts.</p>
+          </motion.div>
+
+          {featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {featuredProducts.map((product, idx) => (
+                <motion.div 
+                  key={product._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-xl shadow-lg shadow-gray-200/50 overflow-hidden border border-gray-100 group flex flex-col h-full"
+                >
+                  <div className="h-48 overflow-hidden bg-gray-50 flex items-center justify-center relative">
+                    <img src={product.images?.[0] || "https://images.unsplash.com/photo-1616087799589-9a7dcbd28151?auto=format&fit=crop&w=600&q=80"} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    {product.isFeatured && <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded">Featured</div>}
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <p className="text-xs text-primary font-bold mb-1 uppercase tracking-wider">{product.category?.name || 'Category'}</p>
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2">{product.name}</h3>
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-grow">{product.shortDescription}</p>
+                    <Link to={`/products/${product.slug}`} className="mt-auto block text-center w-full bg-light text-primary font-semibold py-2 rounded border border-primary/20 hover:bg-primary hover:text-white transition-colors">
+                      View Details
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 py-10">
+              No featured products yet. Please add some from the admin panel.
+            </div>
+          )}
+          
+          <div className="text-center mt-12">
+            <Link to="/products" className="inline-block bg-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl hover:bg-blue-800 transition-all transform hover:-translate-y-1">
+              View All Products
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -238,11 +308,47 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Reviews Section */}
+      <section className="py-20 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10 mb-12">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-sm font-bold text-cyan-600 uppercase tracking-widest mb-3">Testimonials</h2>
+            <h3 className="text-4xl md:text-5xl font-black text-dark mb-6">What Our Partners Say</h3>
+          </div>
+        </div>
+        
+        <div className="relative w-full overflow-hidden flex">
+          <motion.div 
+            className="flex gap-6 px-4"
+            animate={{ x: `calc(-${reviewIndex * (350 + 24)}px)` }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            style={{ width: "fit-content" }}
+          >
+            {[...reviews, ...reviews, ...reviews, ...reviews].map((review, index) => (
+              <div key={index} className="w-[350px] shrink-0 bg-light p-8 rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+                <div className="flex items-center gap-2 mb-4 text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${i < review.rating ? 'fill-current' : 'text-gray-300'}`} viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-gray-600 mb-6 italic leading-relaxed">"{review.text}"</p>
+                <div>
+                  <h4 className="font-bold text-dark">{review.name}</h4>
+                  <p className="text-sm text-cyan-600 font-medium">{review.company}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Parallax CTA Section */}
       <section className="py-32 relative flex items-center justify-center overflow-hidden">
         <motion.div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1616087799589-9a7dcbd28151?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+            src={waterMark} 
             alt="Water treatment" 
             className="w-full h-full object-cover" 
           />

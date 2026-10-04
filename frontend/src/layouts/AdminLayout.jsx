@@ -17,7 +17,8 @@ const AdminLayout = () => {
           <Link to="/admin" className="p-2 hover:bg-gray-800 rounded">Dashboard</Link>
           <Link to="/admin/categories" className="p-2 hover:bg-gray-800 rounded">Categories</Link>
           <Link to="/admin/products" className="p-2 hover:bg-gray-800 rounded">Products</Link>
-          <Link to="/admin/enquiries" className="p-2 hover:bg-gray-800 rounded">Enquiries</Link>
+          <Link to="/admin/enquiries" className="p-2 hover:bg-gray-800 rounded">Wholesale Enquiries</Link>
+          <Link to="/admin/messages" className="p-2 hover:bg-gray-800 rounded">Contact Messages</Link>
           <Link to="/admin/settings" className="p-2 hover:bg-gray-800 rounded">Settings</Link>
           <button onClick={logout} className="p-2 text-left text-red-400 hover:bg-gray-800 rounded mt-4">Logout</button>
         </nav>

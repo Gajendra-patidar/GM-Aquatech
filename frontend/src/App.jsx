@@ -24,7 +24,7 @@ import ManageProducts from './pages/admin/ManageProducts';
 import ManageCategories from './pages/admin/ManageCategories';
 import ManageEnquiries from './pages/admin/ManageEnquiries';
 import ManageSettings from './pages/admin/ManageSettings';
-// (Add others later)
+import ManageContactMessages from './pages/admin/ManageContactMessages';
 
 function App() {
   return (
@@ -51,6 +51,7 @@ function App() {
               <Route path="products" element={<ManageProducts />} />
               <Route path="categories" element={<ManageCategories />} />
               <Route path="enquiries" element={<ManageEnquiries />} />
+              <Route path="messages" element={<ManageContactMessages />} />
               <Route path="settings" element={<ManageSettings />} />
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Route>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import WaterPurificationImg from '../../assets/purifier.jfif';
+import MyImg from '../../assets/myimg.jpeg';
 
 const About = () => {
   return (
@@ -28,7 +30,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <img 
-              src="https://images.unsplash.com/photo-1574621100236-d25bb5ae2338?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              src={WaterPurificationImg}
               alt="Water Purification Plant" 
               className="rounded-2xl shadow-xl w-full object-cover h-[400px]"
             />
@@ -59,6 +61,35 @@ const About = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Business Owner Profile Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="mb-24 bg-white rounded-3xl shadow-xl overflow-hidden"
+        >
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="w-full md:w-1/3 p-8 flex justify-center items-center h-full">
+              <div className="w-68 h-68 rounded-full bg-primary flex items-center justify-center border-4 border-white shadow-lg overflow-hidden relative">
+                <img src={MyImg} />
+              </div>
+            </div>
+            <div className="w-full md:w-2/3 p-10">
+              <div className="uppercase tracking-wider text-primary font-bold text-sm mb-2">Founder & CEO</div>
+              <h2 className="text-3xl font-bold text-dark mb-4">Gajendra Patidar</h2>
+              <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+                With a deep vision for providing clean and safe drinking water, Gajendra Patidar founded G M Aquatech to revolutionize the RO water purification distribution network. Under his leadership, the company has grown into a trusted wholesale partner, emphasizing quality components and exceptional B2B support. His commitment to excellence continues to drive our mission of empowering local dealers across the region.
+              </p>
+              <div className="flex items-center gap-4">
+                <a href="mailto:contact@gmaquatech.com" className="text-gray-500 hover:text-primary transition">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.53 4.82a2 2 0 002.27 0L20 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Banner Section */}
         <motion.div 
